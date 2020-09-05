@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GAME</title>
+    <style>
+    *{
+        padding: 0;
+        margin: 0;
+    }
+    #game{
+        width: 322px;
+        height: 550px;
+        position: relative;
+        background: url("./dt.png") no-repeat 0 -150px;
+        overflow: hidden;
+        border: 1px solid red;
+    }
+    #player{
+        position: absolute;
+        top: 470px;
+        left: 108px;
+    }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <h1 id="score">0</h1>
+        <img src="./m.png" id="player">
+
+        <img src="./e1.png" id="e0" style="position: absolute; display: none">
+        <img src="./e2.png" id="e1" style="position: absolute; display: none">
+        <img src="./e3.png" id="e2" style="position: absolute; display: none">
+        <img src="./e4.png" id="e3" style="position: absolute; display: none">
+        <img src="./e1.png" id="e4" style="position: absolute; display: none">
+        <img src="./e2.png" id="e5" style="position: absolute; display: none">
+        <img src="./e3.png" id="e6" style="position: absolute; display: none">
+        <img src="./e4.png" id="e7" style="position: absolute; display: none">
+    
+        <img src="./eshot.png" id="eshot0" style="position: absolute; display: none">
+        <img src="./eshot.png" id="eshot1" style="position: absolute; display: none">
+        <img src="./eshot.png" id="eshot2" style="position: absolute; display: none">
+        <img src="./eshot.png" id="eshot3" style="position: absolute; display: none">
+        <img src="./eshot.png" id="eshot4" style="position: absolute; display: none">
+        <img src="./eshot.png" id="eshot5" style="position: absolute; display: none">
+        <img src="./eshot.png" id="eshot6" style="position: absolute; display: none">
+        <img src="./eshot.png" id="eshot7" style="position: absolute; display: none">
+        <img src="./eshot.png" id="eshot8" style="position: absolute; display: none">
+        <img src="./eshot.png" id="eshot9" style="position: absolute; display: none">
+
+
+    </div>
+    <script>
+        /*背景地图*/
+        var game = document.getElementById("game");
+        var bg_m = -100;
+        setInterval(()=>{
+            bg_m+=2;
+            if(bg_m>=0){
+                bg_m=-100;
+            }
+            game.style.backgroundPosition="0px "+bg_m+"px";
+        },50)
+        /*飞机*/
+        var player = document.getElementById("player");
+        window.document.onkeydown=(ent)=>{
+            var event = ent || window.event;
+            //w 87 a 65 d 68 s 83 左上右下37-40 
+            switch(event.keyCode){
+                case 87:
+                case 38:
+                    player.style.top=Math.max(0,player.offsetTop-10)+"px";
+                    break;
+                case 83:
+                case 40:
+                    player.style.top=Math.min(320,player.offsetTop+10)+"px";
+                    break;
+                case 65:
+                case 37:
+                    player.style.left=Math.max(0,player.offsetLeft-10)+"px";
+                    break;
+                case 68:
+                case 39:
+                    player.style.left=Math.min(220,player.offsetLeft+10)+"px";
+                    break;
+                case 32:
+                    var x = player.offsetLeft+28;
+                    var y = player.offsetTop;
+                    doFire(x, y);
+                    break;
+            }
+        }
+        function doShow(){
+            var i=Math.round(Math.random()*7)%8;
+            var ee=document.getElementById("e"+i);
+            if(ee.style.display=="none"){
+                ee.style.top=0+"px";
+                ee.style.left=(Math.ceil(Math.random()*225)%250)+"px";
+                ee.style.display="block";
+            }
+            setTimeout("doShow()", 1000);
+        }
+        function doFire(x,y){
+            for(var i=0;i<10;i++){
+                var eshot=document.getElementById("eshot"+i);
+                if(eshot.style.display=="none"){
+                    eshot.style.left=x+"px";
+                    eshot.style.top=y+"px";
+                    eshot.style.display="block";
+                    return;
+                }
+            }
+        }
+        function running(){
+            //循环所有炮弹
+            for(var i=0;i<10;i++){
+                var eshot = document.getElementById("eshot"+i);
+                if(eshot.style.display=="block"){
+                    eshot.style.top=(eshot.offsetTop-5)+"px";
+                    doCheck(eshot);
+                    if(eshot.offsetTop<-20){
+                        eshot.style.display="none";
+                    }
+                }
+            }
+
+            //循环所有敌机
+            for(var i=0;i<8;i++){
+                var ee=document.getElementById("e"+i);
+                if(ee.style.display=="block"){
+                    ee.style.top=(ee.offsetTop+5)+"px";
+                }
+                if(ee.offsetTop>500){
+                    ee.style.display="none";
+                }
+            }
+            //爆炸循环
+            for(var i=0;i<pplist.length;i++){
+                pplist[i].num++;
+                if(pplist[i].num>5){
+                    pplist[i].style.display="none";
+                    pplist.splice(i);
+                }
+            }
+            setTimeout("running()", 30);
+        }
+        var pplist=new Array();
+        var score = 0;
+        function doCheck(eshot){
+            //遍历敌机
+            for(var i=0;i<8;i++){
+                var ee=document.getElementById("e"+i);
+                if(ee.style.display=="block"){
+                    var ex = ee.offsetLeft+15;
+                    var ey = ee.offsetTop+15;
+                    var px = eshot.offsetLeft;
+                    var py = eshot.offsetTop;
+                    if(py<ey && px>=ex && px<=ex+72){
+                        ee.style.display="none";
+                        eshot.style.display="none";
+                        //爆炸场面
+                        var pp=document.createElement("img");
+                        pp.src="./boom.gif";
+                        pp.style.position="absolute";
+                        pp.style.top=(py-120)+"px";
+                        pp.style.left=(px-120)+"px";
+                        pp.num=0;
+                        pplist.push(pp);
+                        game.appendChild(pp);
+                        score++;
+                        document.getElementById("score").innerHTML=score;
+                    }
+                }
+            }
+        }
+        
+        doShow();
+        running();
+
+    </script>
+</body>
+</html>

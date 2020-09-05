@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FLY GAME</title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+</head>
+<body>
+    <div id="bg">   
+        <div id="info">
+
+        </div>
+        <div class="logoBg">
+            <div id="logo">
+
+            </div>
+        </div>
+        <div name="buttonStart" id="buttonStart" >
+
+        </div>
+    </div>
+    <script>
+        var opacity=1.0;
+        var bg=document.getElementById('bg');
+        var handler;
+        var buttonStart = document.getElementById("buttonStart");
+        buttonStart.onclick= (obj)=>{
+            //alert("OK");
+            //bg.style.opacity=0;
+            handler = setInterval(fadeout,50);
+            obj.style.width="20px";
+        }
+        function fadeout(){
+            opacity-=0.2;
+            if(opacity>=0){
+                bg.style.opacity=opacity;
+            }
+            else{
+                document.location="./game.html";
+                clearInterval(handler);
+            }
+        }
+
+
+    </script>
+</body>
+</html>

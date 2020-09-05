@@ -1,0 +1,42 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+
+#bg{
+    width: 512px;
+    height: 600px;
+    background: url("./img.jpg");
+}
+
+.logoBg{
+    width: 512px;
+    height: 350px;
+    /* border: 1px solid red; */
+    padding-top: 50px;
+    margin: auto;
+}
+#logo{
+    width: 450px;
+    height: 200px;
+    background: url(./logo.jpg) no-repeat;
+    background-size: 100%;
+    margin: auto;
+}
+#buttonStart{
+    width: 200px;
+    height: 111px;
+    background: url("./0.jpg") no-repeat;
+    margin: auto;
+}
+#buttonStart:hover{
+    margin: auto;
+    padding-top: 20px;
+    width: 230px;
+    height: 111px;
+    background: url("./0.jpg") no-repeat;
+    background-size: 100%;
+    cursor: pointer;
+
+}
